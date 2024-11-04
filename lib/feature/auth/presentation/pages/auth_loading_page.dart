@@ -9,6 +9,8 @@ import 'package:scribettefix/feature/auth/presentation/states/auth_state.dart';
 class AuthLoadingPage extends ConsumerStatefulWidget {
   const AuthLoadingPage({super.key});
 
+  static String path = '/auth-loading';
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _AuthLoadingPageState();

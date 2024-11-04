@@ -1,7 +1,12 @@
+import 'dart:developer';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:scribettefix/feature/auth/presentation/pages/forgot_password_page.dart';
 import 'package:scribettefix/feature/context/domain/extensions/context_extension.dart';
 import 'package:scribettefix/feature/ming_cute_icons/presentation/widgets/ming_cute_icons.dart';
 
@@ -10,6 +15,8 @@ import 'package:scribettefix/feature/ming_cute_icons/presentation/widgets/ming_c
 class SignInPage extends ConsumerStatefulWidget {
   /// Sing in page constructor
   const SignInPage({super.key});
+
+  static String path = '/login';
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SignInPageState();
@@ -35,28 +42,25 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 SvgPicture.asset(
                   "assets/logo.svg",
                   height: 120,
-                  colorFilter: const ColorFilter.mode(
-                    Color(
-                      0xFF252330,
-                    ),
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.primary,
                     BlendMode.srcIn,
                   ),
                 ),
                 Text(
-                  'Scribette',
-                  style: context.textTheme.headlineMedium?.merge(
-                    const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF252330),
-                    ),
+                  'Scribette,',
+                  style: GoogleFonts.montserrat(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: context.colorScheme.primary,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 Text(
                   context.lang!.slogan,
                   style: context.textTheme.titleMedium?.merge(
-                    const TextStyle(
-                      color: Color(0xFFA9ACBB),
+                    TextStyle(
+                      color: context.colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -68,26 +72,12 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        cursorColor: const Color(0xFF545A78),
+                        cursorColor: context.colorScheme.secondary,
                         decoration: InputDecoration(
-                          hintStyle: context.textTheme.titleMedium?.merge(
-                            const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF545A78),
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          hintText: context
-                              .lang!.emailTextLabel, // Email // EmailTextLabel
-
-                          fillColor: const Color(0xFFE8EFFF),
-                          prefixIcon: const Icon(
+                          hintText: context.lang!.emailTextLabel,
+                          prefixIcon: Icon(
                             MingCuteIcons.mgcMailFill,
-                            color: Color(0xFF545A78),
+                            color: context.colorScheme.secondary,
                           ),
                         ),
                         validator: ValidationBuilder(
@@ -98,30 +88,16 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                             )
                             .build(),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
                       TextFormField(
                         controller: _passwordController,
-                        cursorColor: const Color(0xFF545A78),
+                        cursorColor: context.colorScheme.secondary,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          hintStyle: context.textTheme.titleMedium?.merge(
-                            const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF545A78),
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          hintText: context.lang!
-                              .passwordTextLabel, // Email // EmailTextLabel
-
-                          fillColor: const Color(0xFFE8EFFF),
-                          prefixIcon: const Icon(
-                            MingCuteIcons.mgcMailFill,
-                            color: Color(0xFF545A78),
+                          hintText: context.lang!.passwordTextLabel,
+                          prefixIcon: Icon(
+                            MingCuteIcons.mgcLockFill,
+                            color: context.colorScheme.secondary,
                           ),
                           suffixIcon: IconButton(
                               onPressed: () {
@@ -133,7 +109,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                                 _obscurePassword
                                     ? MingCuteIcons.mgcEyeFill
                                     : MingCuteIcons.mgcEyeCloseFill,
-                                color: const Color(0xFF545A78),
+                                color: context.colorScheme.secondary,
                               )),
                         ),
                         validator: ValidationBuilder(
@@ -146,36 +122,20 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            style: TextButton.styleFrom(
-                              foregroundColor: const Color(0XFF252330),
-                              textStyle: context.textTheme.labelMedium?.merge(
-                                const TextStyle(
-                                  color: Color(0xff252330),
-                                  fontWeight: FontWeight.bold,
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                ForgotPasswordPage.path,
+                                arguments: ForgotPasswordArguments(
+                                  fromPath: SignInPage.path,
                                 ),
-                              ),
-                            ),
-                            onPressed: () {},
+                              );
+                            },
                             child: Text(context.lang!.forgotPassword),
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF262D47),
-                          foregroundColor: Colors.white,
-                          minimumSize: const Size.fromHeight(44),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          textStyle: context.textTheme.titleMedium?.merge(
-                            const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {}
                         },
@@ -188,20 +148,18 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFF262D47),
+                          foregroundColor: context.colorScheme.primary,
                           minimumSize: const Size.fromHeight(44),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
-                            side: const BorderSide(
-                              color: Color(0xFF262D47),
+                            side: BorderSide(
+                              color: context.colorScheme.primary,
                               width: 2,
                             ),
                           ),
-                          textStyle: context.textTheme.titleMedium?.merge(
-                            const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          textStyle: GoogleFonts.montserrat(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         onPressed: () {},
@@ -211,20 +169,40 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: const Color(0xFFA9ACBB),
-                          textStyle: context.textTheme.labelMedium?.merge(
-                            const TextStyle(
+                      RichText(
+                        text: TextSpan(
+                          style: context.textTheme.labelMedium?.merge(
+                            GoogleFonts.montserrat(
+                              color: context.colorScheme.onSurface,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          children: [
+                            TextSpan(
+                              text: context.lang!.dontAccount,
+                            ),
+                            const WidgetSpan(
+                              child: SizedBox(width: 8),
+                            ),
+                            TextSpan(
+                              text: context.lang!.registerLabelName,
+                              style: context.textTheme.labelMedium?.merge(
+                                GoogleFonts.montserrat(
+                                  color: context.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  log(
+                                    'Hola mundo',
+                                    error: 'This is a error',
+                                  );
+                                },
+                            ),
+                          ],
                         ),
-                        onPressed: () {},
-                        child: Text(
-                          context.lang!.dontAccount,
-                        ),
-                      )
+                      ),
                     ],
                   ),
                 ),
