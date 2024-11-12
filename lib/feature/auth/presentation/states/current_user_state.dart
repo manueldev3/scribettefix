@@ -41,4 +41,10 @@ class CurrentUserState extends _$CurrentUserState {
       return null;
     });
   }
+
+  Future<void> signOut() async {
+    state = const AsyncLoading();
+    await repository.signOut();
+    state = const AsyncData(null);
+  }
 }

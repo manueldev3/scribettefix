@@ -57,6 +57,13 @@ class AuthRepository extends FirebaseRepository {
         stackTrace: e.stackTrace,
       );
       return Left('${e.code}: ${e.message}');
+    } catch (error, stackTrace) {
+      log(
+        error.toString(),
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return Left(error.toString());
     }
   }
 
@@ -72,5 +79,9 @@ class AuthRepository extends FirebaseRepository {
       );
       return left('${error.code}: ${error.message}');
     }
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scribettefix/feature/auth/presentation/pages/forgot_password_page.dart';
+import 'package:scribettefix/feature/auth/presentation/pages/sign_up_page.dart';
+import 'package:scribettefix/feature/auth/presentation/states/current_user_state.dart';
 import 'package:scribettefix/feature/context/domain/extensions/context_extension.dart';
 import 'package:scribettefix/feature/ming_cute_icons/presentation/widgets/ming_cute_icons.dart';
 
@@ -23,6 +23,8 @@ class SignInPage extends ConsumerStatefulWidget {
 }
 
 class _SignInPageState extends ConsumerState<SignInPage> {
+  bool _signinEmail = false;
+  bool _signinGoogle = false;
   bool _obscurePassword = true;
 
   final _formKey = GlobalKey<FormState>();
@@ -31,6 +33,9 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserNotifier = ref.read(
+      currentUserStateProvider.notifier,
+    );
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -162,10 +167,30 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: _signinGoogle
+                            ? () {}
+                            : () async {
+                                setState(() {
+                                  _signinGoogle = true;
+                                });
+                                final result = await currentUserNotifier
+                                    .signInWithGoogle();
+                                if (result != null && context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(result),
+                                    ),
+                                  );
+                                }
+                                setState(() {
+                                  _signinGoogle = false;
+                                });
+                              },
                         icon: const Icon(MingCuteIcons.mgcGoogleFill),
                         label: Text(
-                          context.lang!.signInWithEmailGoogleLabel,
+                          _signinGoogle
+                              ? context.lang!.loading
+                              : context.lang!.signInWithEmailGoogleLabel,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -194,9 +219,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  log(
-                                    'Hola mundo',
-                                    error: 'This is a error',
+                                  Navigator.of(context).pushReplacementNamed(
+                                    SignUpPage.path,
                                   );
                                 },
                             ),

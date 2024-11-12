@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:scribettefix/feature/auth/presentation/pages/auth_loading_page.dart';
 import 'package:scribettefix/feature/auth/presentation/pages/forgot_password_page.dart';
 import 'package:scribettefix/feature/auth/presentation/pages/login_page.dart';
+import 'package:scribettefix/feature/auth/presentation/pages/sign_up_page.dart';
+import 'package:scribettefix/feature/home/presentation/pages/home_page.dart';
 import 'package:scribettefix/feature/locale/presentation/state/locale_state.dart';
 import 'package:scribettefix/firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -51,6 +53,19 @@ class MainApp extends ConsumerWidget {
         colorScheme: colorScheme,
         fontFamily: GoogleFonts.montserrat().fontFamily,
         textTheme: GoogleFonts.montserratTextTheme(),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: GoogleFonts.montserrat(
+            color: colorScheme.primary,
+            fontSize: 24,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        dropdownMenuTheme: const DropdownMenuThemeData(
+          inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: Color(0xFFE8EFFF),
+          ),
+        ),
         inputDecorationTheme: InputDecorationTheme(
           hintStyle: GoogleFonts.montserrat(
             fontSize: 16,
@@ -63,6 +78,16 @@ class MainApp extends ConsumerWidget {
           ),
           filled: true,
           fillColor: const Color(0xFFE8EFFF),
+        ),
+        iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(
+            backgroundColor: const Color(0xFFE8EFFF),
+            foregroundColor: colorScheme.primary,
+            minimumSize: const Size(56, 56),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
@@ -93,6 +118,8 @@ class MainApp extends ConsumerWidget {
         AuthLoadingPage.path: (context) => const AuthLoadingPage(),
         SignInPage.path: (context) => const SignInPage(),
         ForgotPasswordPage.path: (context) => const ForgotPasswordPage(),
+        SignUpPage.path: (context) => const SignUpPage(),
+        HomePage.path: (context) => const HomePage(),
       },
     );
   }

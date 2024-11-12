@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'current_user_state.dart';
+part of 'current_tab_state.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentUserStateHash() => r'5a9cc50ae46c3de67a3f1d8c4bdbb0bd9bc9c083';
+String _$currentTabStateHash() => r'7e877abfd0ad627870fe30ab378814489f5beb4f';
 
-/// See also [CurrentUserState].
-@ProviderFor(CurrentUserState)
-final currentUserStateProvider =
-    AutoDisposeAsyncNotifierProvider<CurrentUserState, User?>.internal(
-  CurrentUserState.new,
-  name: r'currentUserStateProvider',
+/// See also [CurrentTabState].
+@ProviderFor(CurrentTabState)
+final currentTabStateProvider =
+    AutoDisposeNotifierProvider<CurrentTabState, int>.internal(
+  CurrentTabState.new,
+  name: r'currentTabStateProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$currentUserStateHash,
+      : _$currentTabStateHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CurrentUserState = AutoDisposeAsyncNotifier<User?>;
+typedef _$CurrentTabState = AutoDisposeNotifier<int>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

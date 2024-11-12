@@ -11,4 +11,5 @@ abstract class FirebaseRepository<T> {
 
 enum Collection {
   users,
+  notes,
 }
