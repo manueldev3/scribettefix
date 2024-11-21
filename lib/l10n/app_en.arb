@@ -145,10 +145,18 @@
   "@noteSaved": {},
   "notificationsName": "Notifications",
   "@notificationsName": {},
+  "notResultsFound": "Not results found.",
+  "@notResultsFound": {},
   "othersOptions": "Others",
   "@othersOptions": {},
   "passwordDontMatch": "Password don''t match",
   "@passwordDontMatch": {},
+  "passwordLengthMessage": "Insert {length} or more chacters.",
+  "@passwordLengthMessage": {
+    "plceholder": {
+      "length": "number"
+    }
+  },
   "passwordTextLabel": "Password",
   "@passwordTextLabel": {},
   "polish": "Polish",
@@ -169,6 +177,8 @@
   "@renameLabel": {},
   "renameNotebook": "Rename {titleNotebook}",
   "@renameNotebook": {},
+  "requiredMessage": "This field is required.",
+  "@requiredMessage": {},
   "resetEmail": "Please enter your email address below to receive a link to reset your password.",
   "@resetEmail": {},
   "russian": "Russian",
@@ -229,6 +239,8 @@
   "@urdu": {},
   "usernameLabel": "Username",
   "@usernameLabel": {},
+  "validEmailMessage": "Insert a valid email.",
+  "@validEmailMessage": {},
   "verificationEmailSent": "A verification email was sent.",
   "@verificationEmailSent": {},
   "vietnamese": "Vietnamese",

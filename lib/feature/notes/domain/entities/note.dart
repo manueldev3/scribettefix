@@ -8,8 +8,8 @@ class Note with _$Note {
   factory Note({
     required String title,
     required String content,
-    String? notebook,
-    DateTime? date,
+    required String notebook,
+    required String date,
   }) = _Note;
 
   factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);

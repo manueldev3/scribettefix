@@ -20,21 +20,23 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   void loadEvents() async {
     DatabaseHelper dbHelper = DatabaseHelper();
 
-    try {
-      Map<DateTime, List<String>> loadedEvents = {};
-      Map<DateTime, List<String>> rawEvents = await dbHelper.getEventsByDate();
+    // try {
+    //   Map<DateTime, List<String>> loadedEvents = {};
+    //   Map<DateTime, List<String>> rawEvents = await dbHelper.getEventsByDate();
 
-      rawEvents.forEach((date, eventList) {
-        try {
-          DateTime dateTime = date;
-          loadedEvents[dateTime] = eventList;
-        } catch (e) {}
-      });
+    //   rawEvents.forEach((date, eventList) {
+    //     DateTime dateTime = DateTime(date.year, date.month, date.day);
+    //     loadedEvents[dateTime] = eventList;
+    //   });
 
-      setState(() {
-        eventsDate = loadedEvents;
-      });
-    } catch (e) {}
+    //   debugPrint(loadedEvents.toString());
+
+    //   setState(() {
+    //     eventsDate = loadedEvents;
+    //   });
+    // } catch (e, s) {
+    //   debugPrint('$e: $s');
+    // }
   }
 
   List<String> _getEventsForDay(DateTime day) {
@@ -62,9 +64,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                 color: const Color(0xFFFFFFFF),
               ),
             ),
-            const SizedBox(
-              width: 16,
-            ),
+            const SizedBox(width: 16),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               decoration: BoxDecoration(
@@ -109,12 +109,11 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       locale: Localizations.localeOf(context).toString(),
                       daysOfWeekHeight: 32,
                       eventLoader: _getEventsForDay,
-                      daysOfWeekStyle: DaysOfWeekStyle(
-                        weekdayStyle: GoogleFonts.montserrat(
-                          color: const Color(0xFF878EA3),
+                      daysOfWeekStyle: const DaysOfWeekStyle(
+                        weekdayStyle: TextStyle(
+                          color: Color(0xFF878EA3),
                         ),
-                        weekendStyle: GoogleFonts.montserrat(
-                            color: const Color(0xFF878EA3)),
+                        weekendStyle: TextStyle(color: Color(0xFF878EA3)),
                       ),
                       firstDay: DateTime.utc(2020, 1, 1),
                       lastDay: DateTime.utc(2030, 12, 31),
@@ -131,10 +130,10 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       calendarStyle: CalendarStyle(
                         markerDecoration: const BoxDecoration(
                             shape: BoxShape.circle, color: Colors.white),
-                        selectedTextStyle: GoogleFonts.montserrat(
-                            color: const Color(0xFFBEC5DF)),
-                        todayTextStyle: GoogleFonts.montserrat(
-                            color: const Color(0xFF878EA3)),
+                        selectedTextStyle:
+                            const TextStyle(color: Color(0xFFBEC5DF)),
+                        todayTextStyle:
+                            const TextStyle(color: Color(0xFF878EA3)),
                         selectedDecoration: const BoxDecoration(
                           color: Color(0xFF434A64),
                           shape: BoxShape.circle,
@@ -146,22 +145,21 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                             width: 2.0,
                           ),
                         ),
-                        defaultTextStyle: GoogleFonts.montserrat(
-                            color: const Color(0xFF878EA3)),
-                        weekendTextStyle: GoogleFonts.montserrat(
-                            color: const Color(0xFF878EA3)),
-                        outsideTextStyle: GoogleFonts.montserrat(
-                            color: const Color(0xFF3E455E)),
+                        defaultTextStyle:
+                            const TextStyle(color: Color(0xFF878EA3)),
+                        weekendTextStyle:
+                            const TextStyle(color: Color(0xFF878EA3)),
+                        outsideTextStyle:
+                            const TextStyle(color: Color(0xFF3E455E)),
                       ),
-                      headerStyle: HeaderStyle(
+                      headerStyle: const HeaderStyle(
                         formatButtonVisible: false,
                         titleCentered: true,
                         leftChevronIcon:
-                            const Icon(Icons.chevron_left, color: Colors.white),
-                        rightChevronIcon: const Icon(Icons.chevron_right,
-                            color: Colors.white),
-                        titleTextStyle:
-                            GoogleFonts.montserrat(color: Colors.white),
+                            Icon(Icons.chevron_left, color: Colors.white),
+                        rightChevronIcon:
+                            Icon(Icons.chevron_right, color: Colors.white),
+                        titleTextStyle: TextStyle(color: Colors.white),
                       ),
                       calendarFormat: CalendarFormat.month,
                     ),
@@ -204,10 +202,10 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                                 children: [
                                   Text(
                                     event,
-                                    style: GoogleFonts.montserrat(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14,
-                                      color: const Color(0xFF1e2337),
+                                      color: Color(0xFF1e2337),
                                     ),
                                   ),
                                 ],

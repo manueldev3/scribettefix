@@ -1,5 +1,7 @@
-import 'package:sqflite/sqflite.dart';
+import 'dart:convert';
+
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -20,7 +22,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'notebooks.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE notebooks (
@@ -30,25 +32,53 @@ class DatabaseHelper {
         ''');
 
         await db.execute('''
-  CREATE TABLE files (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    content TEXT,
-    date TEXT,
-    notebookId INTEGER,
-    FOREIGN KEY (notebookId) REFERENCES notebooks (id)
-  )
-''');
+          CREATE TABLE files (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            content TEXT,
+            date TEXT,
+            notebookId INTEGER,
+            FOREIGN KEY (notebookId) REFERENCES notebooks (id)
+          )
+        ''');
 
         await db.execute('''
-  CREATE TABLE dates (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    date TEXT
-  )
-''');
+          CREATE TABLE dates (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            context TEXT,
+            tasks TEXT
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE flashcards (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            flashcards TEXT
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE mock_tests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            questions TEXT
+          )
+        ''');
 
         await db.insert('notebooks', {'name': '(Not Assignment)'});
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 3) {
+          await db.execute('DROP TABLE IF EXISTS dates');
+          await db.execute('''
+            CREATE TABLE dates (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              context TEXT,
+              tasks TEXT
+            )
+          ''');
+        }
       },
     );
   }
@@ -58,9 +88,13 @@ class DatabaseHelper {
     await db.insert('notebooks', {'name': name});
   }
 
-  Future<void> insertDate(String name, String date) async {
+  Future<void> insertDate(
+      String context, List<Map<String, dynamic>> tasks) async {
     final db = await database;
-    await db.insert('dates', {'title': name, 'date': date});
+    await db.insert('dates', {
+      'context': context,
+      'tasks': jsonEncode(tasks),
+    });
   }
 
   Future<void> renameNotebook(String oldName, String newName) async {
@@ -95,25 +129,22 @@ class DatabaseHelper {
     final db = await database;
     await db.rawUpdate(
       'UPDATE files SET notebookId = ? WHERE title = ?',
-      [notebookId, title], // Bind the notebookId and title to the query
+      [notebookId, title],
     );
   }
 
   Future<void> deleteNotebook(String name) async {
     final db = await database;
 
-    // Step 1: Get the ID of the notebook to be deleted
     int? notebookId = await getNotebookIdByName(name);
 
     if (notebookId != null) {
-      // Step 2: Delete all files associated with this notebook
       await db.delete(
         'files',
         where: 'notebookId = ?',
         whereArgs: [notebookId],
       );
 
-      // Step 3: Delete the notebook itself
       await db.delete(
         'notebooks',
         where: 'name = ?',
@@ -125,7 +156,6 @@ class DatabaseHelper {
   Future<void> deleteNoteByTitle(String title) async {
     final db = await database;
 
-    // Delete the note from the 'files' table where the title matches
     await db.rawDelete(
       'DELETE FROM files WHERE title = ?',
       [title],
@@ -161,16 +191,16 @@ class DatabaseHelper {
   Future<String?> getArticleContentByTitle(String title) async {
     final db = await database;
     List<Map<String, dynamic>> result = await db.query(
-      'files', // assuming the table is 'files'
-      columns: ['content'], // only select the content field
-      where: 'title = ?', // filter by title
+      'files',
+      columns: ['content'],
+      where: 'title = ?',
       whereArgs: [title],
     );
 
     if (result.isNotEmpty) {
       return result.first['content'] as String?;
     } else {
-      return null; // Return null if no article is found
+      return null;
     }
   }
 
@@ -184,7 +214,6 @@ class DatabaseHelper {
     );
   }
 
-  // Fetch article content by ID
   Future<String?> getArticleContentById(int id) async {
     final db = await database;
     var result = await db.query(
@@ -204,64 +233,127 @@ class DatabaseHelper {
     final db = await database;
 
     await db.update(
-      'files', // The table you're working with
+      'files',
       {
-        'title': newTitle, // Update the title
-        'content': content, // Update the content
+        'title': newTitle,
+        'content': content,
       },
-      where: 'title = ?', // Find the row by its current title
-      whereArgs: [oldTitle], // Provide the old title as the condition
+      where: 'title = ?',
+      whereArgs: [oldTitle],
     );
   }
 
-  Future<Map<DateTime, List<String>>> getEventsByDate() async {
+  Future<List<Map<String, dynamic>>> getDates() async {
     final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('dates');
+    return maps.map((map) {
+      return {
+        'id': map['id'],
+        'context': map['context'],
+        'tasks': jsonDecode(map['tasks']),
+      };
+    }).toList();
+  }
 
-    // Query to get all rows from the 'dates' table
-    final List<Map<String, dynamic>> result = await db.query('dates');
-
-    // Initialize an empty map to hold the DateTime and list of event titles
-    Map<DateTime, List<String>> eventsDate = {};
-
-    // Loop through each row in the result
-    for (var row in result) {
-      // Extract the title and date as a string
-      String title = row['title'];
-      String dateString = row['date'];
-
-      // Parse the date string into a DateTime object (assuming 'date' is in ISO 8601 format)
-      try {
-        DateTime eventDate = DateTime.parse(dateString.trim());
-        // Check if the date already exists in the map
-        if (eventsDate.containsKey(eventDate)) {
-          // If it exists, add the event title to the list
-          eventsDate[eventDate]!.add(title.trim());
-        } else {
-          // If the date is not present, create a new entry with a list containing the title
-          eventsDate[eventDate] = [title.trim()];
-        }
-      } catch (e) {}
-    }
-
-    return eventsDate;
+  Future<void> updateDateTasks(int id, List<Map<String, dynamic>> tasks) async {
+    final db = await database;
+    await db.update(
+      'dates',
+      {'tasks': jsonEncode(tasks)},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<int?> getNotebookIdByName(String name) async {
     final db = await database;
 
-    // Query the 'notebooks' table for the notebook with the specified name
     List<Map<String, dynamic>> result = await db.query(
       'notebooks',
-      columns: ['id'], // We only need the 'id' column
+      columns: ['id'],
       where: 'name = ?',
       whereArgs: [name],
     );
 
-    // If the result is not empty, return the id, otherwise return null
     if (result.isNotEmpty) {
       return result.first['id'] as int?;
     } else {
-      return null; // Return null if no notebook with the given name is found
+      return null;
+    }
+  }
+
+  Future<void> saveFlashcards(
+      String title, List<Map<String, dynamic>> flashcards) async {
+    final db = await database;
+    await db.insert(
+      'flashcards',
+      {
+        'title': title,
+        'flashcards': jsonEncode(flashcards),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<Map<String, dynamic>?> getFlashcards(String title) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'flashcards',
+      where: 'title = ?',
+      whereArgs: [title],
+    );
+
+    if (maps.isNotEmpty) {
+      return {
+        'title': maps[0]['title'],
+        'flashcards': jsonDecode(maps[0]['flashcards']),
+      };
+    }
+    return null;
+  }
+
+  Future<void> saveMockTest(
+      String title, List<Map<String, dynamic>> questions) async {
+    final db = await database;
+    await db.insert(
+      'mock_tests',
+      {
+        'title': title,
+        'questions': jsonEncode(questions),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<Map<String, dynamic>?> getMockTest(String title) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'mock_tests',
+      where: 'title = ?',
+      whereArgs: [title],
+    );
+
+    if (maps.isNotEmpty) {
+      return {
+        'title': maps[0]['title'],
+        'questions': jsonDecode(maps[0]['questions']),
+      };
+    }
+    return null;
+  }
+
+  Future<void> updateTaskStatus(int taskId, String newStatus) async {
+    List<Map<String, dynamic>> dates = await getDates();
+
+    for (var date in dates) {
+      List<dynamic> tasks = date['tasks'];
+      int index = tasks.indexWhere((task) => task['id'] == taskId);
+
+      if (index != -1) {
+        tasks[index]['status'] = newStatus;
+        await updateDateTasks(date['id'], tasks.cast<Map<String, dynamic>>());
+        break;
+      }
     }
   }
 }

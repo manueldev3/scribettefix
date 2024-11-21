@@ -8,6 +8,7 @@ import 'package:scribettefix/feature/auth/presentation/pages/login_page.dart';
 import 'package:scribettefix/feature/auth/presentation/pages/sign_up_page.dart';
 import 'package:scribettefix/feature/home/presentation/pages/home_page.dart';
 import 'package:scribettefix/feature/locale/presentation/state/locale_state.dart';
+import 'package:scribettefix/feature/settings/presentation/pages/settings_page.dart';
 import 'package:scribettefix/firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -79,16 +80,6 @@ class MainApp extends ConsumerWidget {
           filled: true,
           fillColor: const Color(0xFFE8EFFF),
         ),
-        iconButtonTheme: IconButtonThemeData(
-          style: IconButton.styleFrom(
-            backgroundColor: const Color(0xFFE8EFFF),
-            foregroundColor: colorScheme.primary,
-            minimumSize: const Size(56, 56),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-        ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: colorScheme.primary,
@@ -120,6 +111,7 @@ class MainApp extends ConsumerWidget {
         ForgotPasswordPage.path: (context) => const ForgotPasswordPage(),
         SignUpPage.path: (context) => const SignUpPage(),
         HomePage.path: (context) => const HomePage(),
+        SettingsPage.path: (context) => const SettingsPage(),
       },
     );
   }

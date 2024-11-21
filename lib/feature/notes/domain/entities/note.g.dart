@@ -9,9 +9,8 @@ part of 'note.dart';
 _$NoteImpl _$$NoteImplFromJson(Map<String, dynamic> json) => _$NoteImpl(
       title: json['title'] as String,
       content: json['content'] as String,
-      notebook: json['notebook'] as String?,
-      date:
-          json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      notebook: json['notebook'] as String,
+      date: json['date'] as String,
     );
 
 Map<String, dynamic> _$$NoteImplToJson(_$NoteImpl instance) =>
@@ -19,5 +18,5 @@ Map<String, dynamic> _$$NoteImplToJson(_$NoteImpl instance) =>
       'title': instance.title,
       'content': instance.content,
       'notebook': instance.notebook,
-      'date': instance.date?.toIso8601String(),
+      'date': instance.date,
     };

@@ -22,8 +22,8 @@ Note _$NoteFromJson(Map<String, dynamic> json) {
 mixin _$Note {
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
-  String? get notebook => throw _privateConstructorUsedError;
-  DateTime? get date => throw _privateConstructorUsedError;
+  String get notebook => throw _privateConstructorUsedError;
+  String get date => throw _privateConstructorUsedError;
 
   /// Serializes this Note to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +39,7 @@ abstract class $NoteCopyWith<$Res> {
   factory $NoteCopyWith(Note value, $Res Function(Note) then) =
       _$NoteCopyWithImpl<$Res, Note>;
   @useResult
-  $Res call({String title, String content, String? notebook, DateTime? date});
+  $Res call({String title, String content, String notebook, String date});
 }
 
 /// @nodoc
@@ -59,8 +59,8 @@ class _$NoteCopyWithImpl<$Res, $Val extends Note>
   $Res call({
     Object? title = null,
     Object? content = null,
-    Object? notebook = freezed,
-    Object? date = freezed,
+    Object? notebook = null,
+    Object? date = null,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -71,14 +71,14 @@ class _$NoteCopyWithImpl<$Res, $Val extends Note>
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      notebook: freezed == notebook
+      notebook: null == notebook
           ? _value.notebook
           : notebook // ignore: cast_nullable_to_non_nullable
-              as String?,
-      date: freezed == date
+              as String,
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as String,
     ) as $Val);
   }
 }
@@ -90,7 +90,7 @@ abstract class _$$NoteImplCopyWith<$Res> implements $NoteCopyWith<$Res> {
       __$$NoteImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, String content, String? notebook, DateTime? date});
+  $Res call({String title, String content, String notebook, String date});
 }
 
 /// @nodoc
@@ -107,8 +107,8 @@ class __$$NoteImplCopyWithImpl<$Res>
   $Res call({
     Object? title = null,
     Object? content = null,
-    Object? notebook = freezed,
-    Object? date = freezed,
+    Object? notebook = null,
+    Object? date = null,
   }) {
     return _then(_$NoteImpl(
       title: null == title
@@ -119,14 +119,14 @@ class __$$NoteImplCopyWithImpl<$Res>
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      notebook: freezed == notebook
+      notebook: null == notebook
           ? _value.notebook
           : notebook // ignore: cast_nullable_to_non_nullable
-              as String?,
-      date: freezed == date
+              as String,
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+              as String,
     ));
   }
 }
@@ -135,7 +135,10 @@ class __$$NoteImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$NoteImpl implements _Note {
   _$NoteImpl(
-      {required this.title, required this.content, this.notebook, this.date});
+      {required this.title,
+      required this.content,
+      required this.notebook,
+      required this.date});
 
   factory _$NoteImpl.fromJson(Map<String, dynamic> json) =>
       _$$NoteImplFromJson(json);
@@ -145,9 +148,9 @@ class _$NoteImpl implements _Note {
   @override
   final String content;
   @override
-  final String? notebook;
+  final String notebook;
   @override
-  final DateTime? date;
+  final String date;
 
   @override
   String toString() {
@@ -190,8 +193,8 @@ abstract class _Note implements Note {
   factory _Note(
       {required final String title,
       required final String content,
-      final String? notebook,
-      final DateTime? date}) = _$NoteImpl;
+      required final String notebook,
+      required final String date}) = _$NoteImpl;
 
   factory _Note.fromJson(Map<String, dynamic> json) = _$NoteImpl.fromJson;
 
@@ -200,9 +203,9 @@ abstract class _Note implements Note {
   @override
   String get content;
   @override
-  String? get notebook;
+  String get notebook;
   @override
-  DateTime? get date;
+  String get date;
 
   /// Create a copy of Note
   /// with the given fields replaced by the non-null parameter values.

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scribettefix/feature/auth/presentation/pages/auth_loading_page.dart';
+import 'package:scribettefix/feature/auth/presentation/pages/forgot_password_page.dart';
 import 'package:scribettefix/feature/auth/presentation/states/current_user_state.dart';
 import 'package:scribettefix/feature/context/domain/extensions/context_extension.dart';
 import 'package:scribettefix/feature/ming_cute_icons/presentation/widgets/ming_cute_icons.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
+
+  static String path = 'settings';
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SettingsPageState();
@@ -42,6 +46,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 trailing: const Icon(Icons.chevron_right),
               ),
               ListTile(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordPage(),
+                      settings: RouteSettings(
+                        name: SettingsPage.path,
+                      ),
+                    ),
+                  );
+                },
                 contentPadding: EdgeInsets.zero,
                 title: Text(context.lang!.changePassword),
                 trailing: const Icon(Icons.chevron_right),
@@ -107,8 +121,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     ),
                   );
 
-                  if (result != null && context.mounted) {
-                    currentUserNotifier.signOut();
+                  if (result != null) {
+                    await currentUserNotifier.signOut();
+                    if (context.mounted) {
+                      Navigator.of(context).pushReplacementNamed(
+                        AuthLoadingPage.path,
+                      );
+                    }
                   }
                 },
                 contentPadding: EdgeInsets.zero,

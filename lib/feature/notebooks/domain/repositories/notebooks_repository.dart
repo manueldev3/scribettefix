@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:scribettefix/core/helpers/database_helper.dart';
 import 'package:scribettefix/core/repositories/database_repository.dart';
 import 'package:scribettefix/feature/auth/domain/repositories/auth_repository.dart';
 import 'package:scribettefix/feature/notebooks/domain/entities/notebook.dart';
 
 class NotebooksRepository extends DatabaseRepository {
   final authRepository = AuthRepository();
+  final dbHelper = DatabaseHelper();
 
   Future<Either<String, List<Notebook>>> getNotebooks() async {
     try {
@@ -52,6 +54,40 @@ class NotebooksRepository extends DatabaseRepository {
         stackTrace: stackTrace,
       );
       return Left(error.toString());
+    }
+  }
+
+  Future<void> rename(
+    String notebookName, {
+    required String title,
+  }) async {
+    if (notebookName.isNotEmpty && notebookName != "(Not Assignment)") {
+      await dbHelper.renameNotebook(
+        title,
+        notebookName,
+      );
+    }
+  }
+
+  Future<void> delete(String title) async {
+    await DatabaseHelper().deleteNotebook(title);
+    final String? email = authRepository.auth.currentUser?.email;
+    final myNotesCollection = authRepository.firestore
+        .collection('users')
+        .doc(email)
+        .collection('notes');
+
+    final recordingsSnapshot = await myNotesCollection.get();
+
+    if (recordingsSnapshot.docs.isNotEmpty) {
+      for (final document in recordingsSnapshot.docs) {
+        String notebookTitle =
+            document.get("notebook").trim().replaceAll("\n", "");
+
+        if (notebookTitle == title) {
+          await myNotesCollection.doc(document.id).delete();
+        }
+      }
     }
   }
 }

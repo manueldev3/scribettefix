@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'notebook_state.dart';
+part of 'products_state.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$notebooksStateHash() => r'f90d5bb8643f2d2007d67db6fce486e3ea1a1319';
+String _$productsStateHash() => r'2ce94df0c481d0248ce4ad8bb3b8f78b2d349714';
 
-/// See also [NotebooksState].
-@ProviderFor(NotebooksState)
-final notebooksStateProvider =
-    AutoDisposeAsyncNotifierProvider<NotebooksState, List<Notebook>>.internal(
-  NotebooksState.new,
-  name: r'notebooksStateProvider',
+/// See also [ProductsState].
+@ProviderFor(ProductsState)
+final productsStateProvider = AutoDisposeAsyncNotifierProvider<ProductsState,
+    List<ProductDetails>>.internal(
+  ProductsState.new,
+  name: r'productsStateProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$notebooksStateHash,
+      : _$productsStateHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$NotebooksState = AutoDisposeAsyncNotifier<List<Notebook>>;
+typedef _$ProductsState = AutoDisposeAsyncNotifier<List<ProductDetails>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

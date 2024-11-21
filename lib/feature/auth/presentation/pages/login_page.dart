@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,7 @@ import 'package:scribettefix/feature/auth/presentation/pages/forgot_password_pag
 import 'package:scribettefix/feature/auth/presentation/pages/sign_up_page.dart';
 import 'package:scribettefix/feature/auth/presentation/states/current_user_state.dart';
 import 'package:scribettefix/feature/context/domain/extensions/context_extension.dart';
+import 'package:scribettefix/feature/home/presentation/pages/home_page.dart';
 import 'package:scribettefix/feature/ming_cute_icons/presentation/widgets/ming_cute_icons.dart';
 
 /// Sign in Page
@@ -23,9 +25,11 @@ class SignInPage extends ConsumerStatefulWidget {
 }
 
 class _SignInPageState extends ConsumerState<SignInPage> {
-  bool _signinEmail = false;
+  bool _loading = false;
   bool _signinGoogle = false;
   bool _obscurePassword = true;
+
+  final auth = FirebaseAuth.instance;
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -141,12 +145,54 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {}
-                        },
-                        icon: const Icon(MingCuteIcons.mgcMailFill),
+                        onPressed: _loading
+                            ? () {}
+                            : () {
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() {
+                                    _loading = true;
+                                  });
+
+                                  auth
+                                      .signInWithEmailAndPassword(
+                                    email: _emailController.text.trim(),
+                                    password: _passwordController.text,
+                                  )
+                                      .then((UserCredential
+                                          userCredential) async {
+                                    if (userCredential.user != null) {
+                                      if (context.mounted) {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                          HomePage.path,
+                                        );
+                                      }
+                                    } else {
+                                      if (context.mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            backgroundColor:
+                                                const Color(0xFF262D47),
+                                            content: Text(
+                                              context.lang!.errorSign,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  });
+                                }
+                              },
+                        icon: _loading
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : const Icon(MingCuteIcons.mgcMailFill),
                         label: Text(
-                          context.lang!.signInWithEmailLabel,
+                          _loading
+                              ? context.lang!.loading
+                              : context.lang!.signInWithEmailLabel,
                         ),
                       ),
                       const SizedBox(height: 16),

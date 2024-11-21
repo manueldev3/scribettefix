@@ -14,6 +14,34 @@ class AuthRepository extends FirebaseRepository {
     return auth.authStateChanges();
   }
 
+  Future<Either<String, User?>> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return Right(userCredential.user);
+    } on FirebaseAuthException catch (e) {
+      log(
+        e.code,
+        error: e.message,
+        stackTrace: e.stackTrace,
+      );
+      return Left('${e.code}: ${e.message}');
+    } catch (e, s) {
+      log(
+        e.toString(),
+        error: e,
+        stackTrace: s,
+      );
+      return Left(e.toString());
+    }
+  }
+
   Future<Either<String, User?>> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();

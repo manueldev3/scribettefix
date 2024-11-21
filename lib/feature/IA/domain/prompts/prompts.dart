@@ -11,7 +11,7 @@ String prompt2(
   BuildContext context, {
   required DateTime date,
   required String startTime,
-  required String endTime,
+  required DateTime endTime,
 }) {
   final locale = Localizations.localeOf(context);
   return locale.languageCode == 'es'
