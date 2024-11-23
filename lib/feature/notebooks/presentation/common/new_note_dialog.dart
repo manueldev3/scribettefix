@@ -27,20 +27,21 @@ class _NewNotebookDialogState extends ConsumerState<NewNotebookDialog> {
         spacing: 8,
         children: [
           SizedBox(
-            width: context.mediaQuery.size.width - 128,
+            width: context.mediaQuery.size.width - 120,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   context.lang!.createNotebook,
                   style: GoogleFonts.montserrat(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: context.colorScheme.primary,
                   ),
                 ),
                 IconButton(
                   style: IconButton.styleFrom(
+                    minimumSize: const Size(16, 16),
                     backgroundColor: Colors.transparent,
                     padding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,

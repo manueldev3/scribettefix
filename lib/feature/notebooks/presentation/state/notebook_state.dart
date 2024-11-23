@@ -1,5 +1,4 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:scribettefix/core/helpers/database_helper.dart';
 import 'package:scribettefix/feature/files/domain/entities/file_entity.dart';
 import 'package:scribettefix/feature/notebooks/domain/entities/notebook.dart';
 import 'package:scribettefix/feature/notebooks/domain/repositories/notebooks_repository.dart';

@@ -5,7 +5,9 @@ import 'package:scribettefix/feature/auth/presentation/pages/auth_loading_page.d
 import 'package:scribettefix/feature/auth/presentation/pages/forgot_password_page.dart';
 import 'package:scribettefix/feature/auth/presentation/states/current_user_state.dart';
 import 'package:scribettefix/feature/context/domain/extensions/context_extension.dart';
+import 'package:scribettefix/feature/languages/presentation/pages/languages_page.dart';
 import 'package:scribettefix/feature/ming_cute_icons/presentation/widgets/ming_cute_icons.dart';
+import 'package:scribettefix/feature/settings/presentation/pages/edit_profile_page.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -41,6 +43,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               const Divider(),
               ListTile(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const EditProfilePage(),
+                    ),
+                  );
+                },
                 contentPadding: EdgeInsets.zero,
                 title: Text(context.lang!.editProfileLabel),
                 trailing: const Icon(Icons.chevron_right),
@@ -51,7 +60,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     MaterialPageRoute(
                       builder: (context) => const ForgotPasswordPage(),
                       settings: RouteSettings(
-                        name: SettingsPage.path,
+                        arguments: ForgotPasswordArguments(
+                          fromPath: SettingsPage.path,
+                        ),
                       ),
                     ),
                   );
@@ -91,8 +102,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               const Divider(),
               ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    LanguagesPage.path,
+                  );
+                },
                 contentPadding: EdgeInsets.zero,
                 title: Text(context.lang!.languageName),
+                subtitle: Text(context.lang!.lang),
+                subtitleTextStyle: GoogleFonts.montserrat(
+                  color: context.colorScheme.primary,
+                  fontSize: 18,
+                ),
                 trailing: const Icon(Icons.chevron_right),
               ),
               ListTile(

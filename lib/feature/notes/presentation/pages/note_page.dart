@@ -542,41 +542,6 @@ class _NotePageState extends ConsumerState<NotePage> {
     );
   }
 
-  Widget _buildActionButton(BuildContext context,
-      {required IconData icon,
-      required String label,
-      required VoidCallback onPressed}) {
-    return SizedBox(
-      width: double.infinity,
-      child: TextButton(
-        onPressed: onPressed,
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 12.0),
-          backgroundColor: const Color(0xFFE8EFFF),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                label,
-                style: const TextStyle(color: Color(0xFF545A78)),
-              ),
-              Icon(
-                icon,
-                color: const Color(0xFF545A78),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Future<void> updateNoteContent(String title, String content) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 

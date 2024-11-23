@@ -1,4 +1,9 @@
 {
+  "@@locale": "en",
+  "lang": "English",
+  "@lang": {},
+  "countryName": "",
+  "@countryName": {},
   "accountTitle": "Account",
   "@accountTitle": {},
   "alreadyAccount": "Already have an account?",

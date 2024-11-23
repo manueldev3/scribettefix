@@ -318,12 +318,6 @@ class _RecorderPageState extends ConsumerState<RecorderPage> {
     return DateFormat('MMMM d, y HH:mm:ss a').format(date);
   }
 
-  String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final remainingSeconds = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
-  }
-
   Future<void> _purchaseSubscription() async {
     if (_products.isEmpty) {
       debugPrint("No products available for purchase.");

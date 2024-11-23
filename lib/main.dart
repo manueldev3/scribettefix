@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scribettefix/feature/auth/presentation/pages/auth_loading_page.dart';
@@ -7,6 +8,7 @@ import 'package:scribettefix/feature/auth/presentation/pages/forgot_password_pag
 import 'package:scribettefix/feature/auth/presentation/pages/login_page.dart';
 import 'package:scribettefix/feature/auth/presentation/pages/sign_up_page.dart';
 import 'package:scribettefix/feature/home/presentation/pages/home_page.dart';
+import 'package:scribettefix/feature/languages/presentation/pages/languages_page.dart';
 import 'package:scribettefix/feature/locale/presentation/state/locale_state.dart';
 import 'package:scribettefix/feature/settings/presentation/pages/settings_page.dart';
 import 'package:scribettefix/firebase_options.dart';
@@ -45,7 +47,12 @@ class MainApp extends ConsumerWidget {
 
     return MaterialApp(
       locale: locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -112,6 +119,7 @@ class MainApp extends ConsumerWidget {
         SignUpPage.path: (context) => const SignUpPage(),
         HomePage.path: (context) => const HomePage(),
         SettingsPage.path: (context) => const SettingsPage(),
+        LanguagesPage.path: (context) => const LanguagesPage(),
       },
     );
   }

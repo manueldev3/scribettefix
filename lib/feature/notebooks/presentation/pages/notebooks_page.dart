@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scribettefix/core/helpers/database_helper.dart';
 import 'package:scribettefix/core/repositories/firebase_repository.dart';
@@ -119,7 +118,6 @@ class _NotebooksPageState extends ConsumerState<NotebooksPage> {
     final authChanges = ref.watch(authChangesProvider);
     final currentUser = authChanges.value;
     final notebooksState = ref.watch(notebooksStateProvider);
-    final notebooksNotifier = ref.read(notebooksStateProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(

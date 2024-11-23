@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:scribettefix/core/helpers/database_helper.dart';
 import 'package:scribettefix/feature/context/domain/extensions/context_extension.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -18,7 +17,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   Map<DateTime, List<String>> eventsDate = {};
 
   void loadEvents() async {
-    DatabaseHelper dbHelper = DatabaseHelper();
+    // DatabaseHelper dbHelper = DatabaseHelper();
 
     // try {
     //   Map<DateTime, List<String>> loadedEvents = {};
